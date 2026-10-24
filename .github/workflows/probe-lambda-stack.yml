@@ -1,0 +1,26 @@
+name: probe lambda stack
+on:
+  push:
+    branches: [probe/lambda-stack-windows]
+  workflow_dispatch:
+jobs:
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - name: probe
+        shell: bash
+        env:
+          BASE: 00b65d7e
+          OURS: 6a65f629
+        run: |
+          cp -r .github/probe "$RUNNER_TEMP/probe"
+          rustc --version
+          PROBE_DIR="$RUNNER_TEMP/probe" bash "$RUNNER_TEMP/probe/run.sh"
