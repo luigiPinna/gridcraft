@@ -1,0 +1,26 @@
+name: probe lambda cap cli
+on:
+  push:
+    branches: [probe/lambda-cap-cli]
+  workflow_dispatch:
+jobs:
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - name: probe
+        shell: bash
+        env:
+          BASE: 17b9f6ff
+          OURS: deec166e
+        run: |
+          cp -r .github/probe-cli "$RUNNER_TEMP/probe-cli"
+          rustc --version
+          bash "$RUNNER_TEMP/probe-cli/run.sh"
