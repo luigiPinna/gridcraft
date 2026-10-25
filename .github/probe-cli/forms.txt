@@ -1,0 +1,8 @@
+countdown|=LET(F,LAMBDA(me,n,IF(n<=0,0,1+me(me,n-1))),F(F,{N}))
+tail0|=LET(F,LAMBDA(me,n,IF(n=0,0,me(me,n-1))),F(F,{N}))
+let|=LET(F,LAMBDA(me,n,IF(n<=0,0,LET(e,me(me,n-1),e+1))),F(F,{N}))
+map|=LET(F,LAMBDA(me,n,IF(n<=0,0,1+SUM(MAP({1},LAMBDA(v,me(me,n-1)))))),F(F,{N}))
+reduce|=LET(F,LAMBDA(me,n,IF(n<=0,0,1+REDUCE(0,{1},LAMBDA(a,v,me(me,n-1))))),F(F,{N}))
+wrapped|=LET(W,LAMBDA(f,k,f(f,k)),F,LAMBDA(me,n,IF(n<=0,0,1+W(me,n-1))),F(F,{N}))
+iferror|=LET(F,LAMBDA(me,n,IF(n<=0,0,1+IFERROR(me(me,n-1),-1000000))),F(F,{N}))
+choose|=LET(F,LAMBDA(me,n,IF(n<=0,0,CHOOSE(1,1+me(me,n-1),0))),F(F,{N}))

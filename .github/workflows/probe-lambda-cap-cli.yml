@@ -18,9 +18,8 @@ jobs:
       - name: probe
         shell: bash
         env:
-          BASE: 17b9f6ff
-          OURS: deec166e
+          CONFIGS: main-guard:17b9f6ff:1 ours-guard:deec166e:1 raise:6cc8b791:0
         run: |
           cp -r .github/probe-cli "$RUNNER_TEMP/probe-cli"
           rustc --version
-          bash "$RUNNER_TEMP/probe-cli/run.sh"
+          PROBE_DIR="$RUNNER_TEMP/probe-cli" bash "$RUNNER_TEMP/probe-cli/run2.sh"
