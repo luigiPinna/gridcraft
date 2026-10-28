@@ -15,12 +15,11 @@ jobs:
         with:
           fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
-      - name: tests on the final commit
+      - name: probe
         shell: bash
+        env:
+          CONFIGS: main-guard:55b5a45a:1 ours-guard:c9318440:1
         run: |
-          git checkout -q 27362d58
+          cp -r .github/probe-cli "$RUNNER_TEMP/probe-cli"
           rustc --version
-          for flag in "" --release; do
-            echo "### calc ${flag:-dev}"; cargo test -q -p gridcraft-calc $flag 2>&1 | grep -E '^test result|FAILED|panicked|error'
-          done
-          echo "### engine dev"; cargo test -q -p gridcraft-engine 2>&1 | grep -E '^test result|FAILED|panicked|error'
+          PROBE_DIR="$RUNNER_TEMP/probe-cli" bash "$RUNNER_TEMP/probe-cli/run2.sh"
